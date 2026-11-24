@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import{products,customers,orders,inquiries}from'../src/data.js';import{filterProducts,changeCart,total,validateCheckout,placeOrder,metrics}from'../src/logic.js';
+const form={name:'Test Buyer',email:'buyer@example.com',phone:'123456789',address:'123 Test Street'};
+const base=()=>({products,customers,orders,inquiries,cart:[{...products[0],qty:2}]});
+test('16 products and category filter',()=>{assert.equal(products.length,16);assert.equal(filterProducts(products,'','Phones','default').length,4)});
+test('search case insensitive and empty results',()=>{assert.equal(filterProducts(products,'SONY','All','default')[0].id,9);assert.equal(filterProducts(products,'xyz','All','default').length,0)});
+test('sort both directions',()=>{assert.equal(filterProducts(products,'','All','low')[0].price,89);assert.equal(filterProducts(products,'','All','high')[0].price,1599)});
+test('cart add increase remove and total',()=>{let c=changeCart([],products[0],1);c=changeCart(c,products[0],1);assert.equal(total(c),2198);assert.equal(changeCart(c,products[0],-2).length,0)});
+test('checkout validation rejects invalid input',()=>{assert.equal(validateCheckout({...form,email:'bad'}),false);assert.equal(validateCheckout(form),true);assert.throws(()=>placeOrder({...base(),cart:[]},form))});
+test('checkout creates CRM order and customer and clears cart',()=>{const s=placeOrder(base(),form);assert.equal(s.orders.length,3);assert.equal(s.customers.length,3);assert.equal(s.cart.length,0);assert.equal(s.orders[0].total,2198);assert.equal(s.orders[0].status,'Pending');assert.equal(s.orders[0].customerId,s.customers[2].id)});
+test('existing customer is reused',()=>{const s=placeOrder(base(),{...form,email:' ALEX@example.com '.trim()});assert.equal(s.customers.length,2);assert.equal(s.orders[0].customerId,'C1')});
+test('metrics revenue only delivered and pending count',()=>{const s=placeOrder(base(),form);assert.deepEqual(metrics(s),{revenue:1099,orders:3,customers:3,pending:2});s.orders[0].status='Delivered';assert.equal(metrics(s).revenue,3297)});
+test('state survives JSON serialization',()=>{const s=placeOrder(base(),form);assert.deepEqual(JSON.parse(JSON.stringify(s)),s)});

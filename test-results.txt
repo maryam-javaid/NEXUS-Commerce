@@ -1,0 +1,68 @@
+
+> nexus-commerce@1.0.0 test
+> node --test
+
+TAP version 13
+# Subtest: 16 products and category filter
+ok 1 - 16 products and category filter
+  ---
+  duration_ms: 1.783555
+  type: 'test'
+  ...
+# Subtest: search case insensitive and empty results
+ok 2 - search case insensitive and empty results
+  ---
+  duration_ms: 0.129276
+  type: 'test'
+  ...
+# Subtest: sort both directions
+ok 3 - sort both directions
+  ---
+  duration_ms: 0.199381
+  type: 'test'
+  ...
+# Subtest: cart add increase remove and total
+ok 4 - cart add increase remove and total
+  ---
+  duration_ms: 0.260393
+  type: 'test'
+  ...
+# Subtest: checkout validation rejects invalid input
+ok 5 - checkout validation rejects invalid input
+  ---
+  duration_ms: 0.596741
+  type: 'test'
+  ...
+# Subtest: checkout creates CRM order and customer and clears cart
+ok 6 - checkout creates CRM order and customer and clears cart
+  ---
+  duration_ms: 1.892309
+  type: 'test'
+  ...
+# Subtest: existing customer is reused
+ok 7 - existing customer is reused
+  ---
+  duration_ms: 0.20482
+  type: 'test'
+  ...
+# Subtest: metrics revenue only delivered and pending count
+ok 8 - metrics revenue only delivered and pending count
+  ---
+  duration_ms: 0.60956
+  type: 'test'
+  ...
+# Subtest: state survives JSON serialization
+ok 9 - state survives JSON serialization
+  ---
+  duration_ms: 0.637493
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 77.891093
